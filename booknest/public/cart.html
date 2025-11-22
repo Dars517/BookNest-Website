@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Cart - BookNest</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <nav>
+      <h1>📚 BookNest - Your Cart</h1>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="cart.html">Cart</a></li>
+        <li><a href="wishlist.html">Wishlist</a></li>
+        <li><a href="orders.html">Orders</a></li>
+        <li><a href="login.html">Login</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <table id="cartTable">
+      <thead>
+        <tr>
+          <th>Book</th>
+          <th>Price</th>
+          <th>Qty</th>
+          <th>Remove</th>
+        </tr>
+      </thead>
+      <tbody id="cartBody"></tbody>
+    </table>
+    <h3 id="totalPrice"></h3>
+    <button onclick="checkout()">Checkout</button>
+  </main>
+
+  <script>
+    const userId = localStorage.getItem("userId");
+
+    if (!userId) {
+      alert("Please login first");
+      window.location.href = "login.html";
+    } else {
+      loadCart();
+    }
+
+    function loadCart() {
+      fetch(`http://localhost:5000/api/cart/${userId}`)
+        .then(res => res.json())
+        .then(items => {
+          const tbody = document.getElementById("cartBody");
+          let total = 0;
+
+          if (!items.length) {
+            tbody.innerHTML = `<tr><td colspan="4">Your cart is empty.</td></tr>`;
+            document.getElementById("totalPrice").innerText = "";
+            return;
+          }
+
+          tbody.innerHTML = items.map(item => {
+            total += item.price * item.quantity;
+            return `
+              <tr>
+                <td>
+                  <img src="${item.image}" width="60"><br>
+                  ${item.title}
+                </td>
+                <td>₹${item.price}</td>
+                <td>${item.quantity}</td>
+                <td><button onclick="removeFromCart(${item.id})">❌</button></td>
+              </tr>
+            `;
+          }).join("");
+
+          document.getElementById("totalPrice").innerText = `Total: ₹${total}`;
+        })
+        .catch(err => console.error("Error loading cart:", err));
+    }
+
+    function removeFromCart(cartId) {
+      fetch(`http://localhost:5000/api/cart/${cartId}`, { method: "DELETE" })
+        .then(res => res.json())
+        .then(data => {
+          alert(data.message);
+          loadCart();
+        })
+        .catch(err => console.error(err));
+    }
+
+    function checkout() {
+      window.location.href = "checkout.html";
+    }
+  </script>
+
+</body>
+</html>
+
+<style>
+    body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background: #f4f4f4;
+}
+header {
+    background: #222;
+    color: white;
+    padding: 10px 20px;
+}
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+nav ul {
+    list-style: none;
+    display: flex;
+}
+nav ul li {
+    margin-left: 20px;
+}
+nav ul li a {
+    color: white;
+    text-decoration: none;
+}
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 15px;
+    padding: 20px;
+}
+.book {
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
+}
+.book h3 {
+    margin: 10px 0;
+}
+.book button {
+    background: #28a745;
+    color: white;
+    padding: 8px 12px;
+    border: none;
+    cursor: pointer;
+}
+.book button:hover {
+    background: #218838;
+}
+
+    /* ====== Global Reset ====== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* ====== Header & Nav ====== */
+
+header h1 {
+  font-size: 1.5rem;
+}
+nav a {
+  color: #fff;
+  margin-left: 15px;
+  text-decoration: none;
+  font-size: 0.95rem;
+}
+nav a:hover {
+  text-decoration: underline;
+}
+
+/* ====== Layout ====== */
+main {
+  padding: 20px;
+}
+h2 {
+  margin-bottom: 15px;
+  font-size: 1.3rem;
+  color: #2c3e50;
+}
+
+/* ====== Grid for Books ====== */
+
+.book img {
+  max-width: 100%;
+  height: 160px;
+  object-fit: cover;
+  margin-bottom: 10px;
+}
+.book h3 {
+  font-size: 1rem;
+  margin-bottom: 5px;
+}
+.book p {
+  margin: 5px 0;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+/* ====== Buttons ====== */
+button {
+  background: #27ae60;
+  color: #fff;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  margin: 5px 3px;
+  font-size: 0.9rem;
+  transition: background 0.2s ease;
+}
+button:hover {
+  background: #219150;
+}
+button.danger {
+  background: #e74c3c;
+}
+button.danger:hover {
+  background: #c0392b;
+}
+
+/* ====== Forms ====== */
+.form-container {
+  background: #fff;
+  padding: 25px;
+  margin: 30px auto;
+  max-width: 400px;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+form input, form textarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 0.95rem;
+}
+form textarea {
+  resize: vertical;
+}
+
+/* ====== Tables ====== */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+th, td {
+  padding: 12px;
+  border-bottom: 1px solid #eee;
+  text-align: left;
+}
+th {
+  background: #34495e;
+  color: #fff;
+}
+td button {
+  padding: 5px 10px;
+  font-size: 0.85rem;
+}
+
+/* ====== Admin page ====== */
+#adminBookTable {
+  margin-top: 20px;
+}
+
+/* ====== Book Details Page ====== */
+#bookDetails {
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 600px;
+  margin: 0 auto;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+#bookDetails h2 {
+  margin-bottom: 10px;
+}
+#bookDetails p {
+  margin: 5px 0;
+}
+
+/* ====== Responsive ====== */
+@media (max-width: 600px) {
+  header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  nav a {
+    display: inline-block;
+    margin: 5px 10px 0 0;
+  }
+}
+</style>

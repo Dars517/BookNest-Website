@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <title>BookNest</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <h1>📚 BookNest</h1>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="cart.html">Cart</a></li>
+                <li><a href="wishlist.html">Wishlist</a></li>
+                <li><a href="orders.html">Orders</a></li>
+                <li><a href="login.html">Login</a></li>
+            </ul>
+        </nav>
+    </header>
+
+<main>
+    <!-- Hero Section with Background Image -->
+    <section class="hero">
+        <div class="hero-content">
+            <h2>The way book buying should be</h2>
+            <p>Transparent prices. BookNest Verified quality.</p>
+            <button onclick="location.href='book.html'" class="shop-btn">EXPLORE NOW</button>
+        </div>
+    </section>
+
+    <div id="book-list" class="grid"></div>
+
+     <section class="products" class="section-p1">
+             <h1>Available Books</h1>
+            <p>BOOKS</p>
+            <div class="feature" data-category="Popular">
+                <a href="book.html">
+                <img src="C:\Users\hp\OneDrive\Desktop\booknest\image\popular.jpg" alt="Popular">
+                    <h5>POPULAR</h5>
+                    </a>
+                </div>
+                <div class="feature" data-category="Horror">
+                    <a href="book.html">
+                    <img src="C:\Users\hp\OneDrive\Desktop\booknest\image\horror.jpg" alt="Horror">
+                        <h5>HORROR BOOKS</h5>
+                    </a>
+                    </div>
+                <div class="feature" data-category="10th">
+                    <a href="book.html">
+                        <img src="C:\Users\hp\OneDrive\Desktop\booknest\image\10th.jpg" alt="10th">
+                            <h5>10th BOOKS</h5>
+                            </a>
+                        </div>
+                <div class="feature" data-category="12th">
+                    <a href="book.html">
+                        <img src="C:\Users\hp\OneDrive\Desktop\booknest\image\12th.jpg" alt="12th">
+                            <h5>12th BOOKS</h5>
+                            </a>
+                        </div>
+                <div class="feature" data-category="sports">
+                    <a href="book.html">
+                        <img src="C:\Users\hp\OneDrive\Desktop\booknest\image\sports.jpg" alt="sports">
+                            <h5>SPORTS STORY</h5>
+                            </a>
+                        </div>
+                        <div class="feature" data-category="Comics">
+                            <a href="book.html">
+                            <img src="C:\Users\hp\OneDrive\Desktop\booknest\image\comics.jpg" alt="Comics">
+                                <h5>Comics</h5>
+                                </a>
+                            </div>
+                            
+            </div>
+
+        </section>
+
+    <footer>
+    <div class="footer-container">
+        <!-- About Section -->
+        <div class="footer-section about">
+            <h3>About Booknest</h3>
+            <p>Your one-stop destination for Popular Books. Shop with us and experience hassle-free online shopping.</p>
+        </div>
+
+        <!-- Quick Links -->
+        <div class="footer-section links">
+            <h3>Quick Links</h3>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="cart.html">Cart</a></li>
+                <li><a href="wishlist.html">Wishlist</a></li>
+                <li><a href="orders.html">Orders</a></li>
+            </ul>
+        </div>
+
+        <!-- Customer Support -->
+        <div class="footer-section support">
+            <h3>Customer Support</h3>
+            <ul>
+                <li><a href="#">FAQs</a></li>
+                <li><a href="#">Contact Us</a></li>
+                <li><a href="#">Shipping Info</a></li>
+            </ul>
+        </div>
+
+        <!-- Social Media Links -->
+        <div class="footer-section social">
+            <h3>Follow Us</h3>
+            <div class="social-icons">
+                <a href="#"><i class="fab fa-facebook"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-linkedin"></i></a>
+            </div>
+        </div>
+</footer>
+<footer>
+    <p class="footer-bottom">&copy; 2025 BOOKNEST. All Rights Reserved.</p>
+</footer>
+</main>
+
+
+
+<script>
+        // load books and render
+fetch('/api/books')
+  .then(r => r.json())
+  .then(data => {
+    const bookList = document.getElementById('book-list');
+    data.forEach(book => {
+      const div = document.createElement('div');
+      div.className = 'book';
+      div.innerHTML = `
+        <img src="${book.image || '/images/placeholder.jpg'}" alt="${book.title}">
+        <h3>${book.title}</h3>
+        <p>${book.author}</p>
+        <p>₹${book.price}</p>
+        <button onclick="addToCart(${book.id})">Add to Cart</button>
+      `;
+      bookList.appendChild(div);
+    });
+  });
+
+function addToCart(bookId) {
+  const userId = localStorage.getItem('userId');
+  if (!userId) return alert('Login required');
+  fetch('/api/cart', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({ user_id: userId, book_id: bookId, quantity: 1 })
+  }).then(r=>r.json()).then(j => alert(j.message));
+}
+
+    </script>
+</body>
+</html>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background: #f4f4f4;
+}
+header {
+    background: #222;
+    color: white;
+    padding: 10px 20px;
+}
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+nav ul {
+    list-style: none;
+    display: flex;
+}
+nav ul li {
+    margin-left: 20px;
+}
+nav ul li a {
+    color: white;
+    text-decoration: none;
+}
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 15px;
+    padding: 20px;
+}
+.book {
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
+}
+.book h3 {
+    margin: 10px 0;
+}
+.book button {
+    background: #28a745;
+    color: white;
+    padding: 8px 12px;
+    border: none;
+    cursor: pointer;
+}
+.book button:hover {
+    background: #218838;
+}
+
+.hero {
+    position: relative;
+    background: url("C:/Users/hp/OneDrive/Desktop/booknest/image/back.jpg") no-repeat center center/cover;
+    height: 100vh;  /* adjust as needed */
+    display: flex;
+    align-items: center;     /* vertical alignment */
+    justify-content: flex-start; /* align to left */
+    padding-left: 60px;      /* spacing from left edge */
+    color: white;
+    text-align: left;
+}
+
+.hero::after {
+    content: "";
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.4); /* dark overlay */
+}
+
+.hero-content {
+    position: relative;
+    z-index: 1;
+    max-width: 500px;
+}
+
+.hero h2 {
+    font-size: 60px;
+    margin-bottom: 15px;
+    font-weight: bold;
+}
+
+.hero p {
+    margin-bottom: 20px;
+    font-size: 25px;
+}
+
+.shop-btn {
+    background: #ffcc00;
+    color: #222;
+    padding: 12px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.shop-btn:hover {
+    background: #e6b800;
+}
+
+footer {
+        background: #222;
+        color: white;
+        padding: 40px 0;
+        text-align: center;
+    }
+
+    .footer-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        padding: 20px;
+    }
+
+    .footer-section {
+        width: 20%;
+        min-width: 200px;
+        margin: 10px 0;
+    }
+
+    .footer-section h3 {
+        font-size: 18px;
+        margin-bottom: 15px;
+        color: #ff4b2b;
+    }
+
+    .footer-section ul {
+        list-style: none;
+        padding: 0;
+    }
+
+    .footer-section ul li {
+        margin: 8px 0;
+    }
+
+    .footer-section ul li a {
+        text-decoration: none;
+        color: white;
+        transition: 0.3s;
+    }
+
+    .footer-section ul li a:hover {
+        color: #ff4b2b;
+    }
+
+    .social-icons a {
+        color: white;
+        font-size: 20px;
+        margin: 0 10px;
+        transition: 0.3s;
+    }
+
+    .social-icons a:hover {
+        color: #ff4b2b;
+    }
+
+    .footer-bottom {
+        margin-top: 1px;
+        font-size: 14px;
+    }
+
+    @media (max-width: 768px) {
+        .footer-container {
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .footer-section {
+            width: 80%;
+            text-align: center;
+        }
+
+        .newsletter input {
+            width: 90%;
+        }
+    }
+
+    .products {
+        text-align: center;
+        padding: 50px 20px;
+        background: #f9f9f9;
+    }
+
+    .products h1 {
+        font-size: 2rem;
+        margin-bottom: 10px;
+        color: #222;
+    }
+
+    .products p {
+        font-size: 1.2rem;
+        color: #555;
+    }
+
+    /* Featured Product Grid */
+    .feature-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 20px;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.feature {
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    text-align: center;
+    transition: 0.3s ease-in-out;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.feature a {
+    text-decoration: none;
+    color: #222;
+}
+
+/* 🔧 Fix Image Cropping */
+.feature img {
+    width: 100%;
+    height: 180px; /* Adjust this if needed */
+    object-fit: contain; /* Ensures full image is visible */
+    border-radius: 10px;
+    transition: transform 0.3s ease-in-out;
+}
+
+.feature h5 {
+    margin-top: 10px;
+    font-size: 1rem;
+    font-weight: bold;
+    color: #333;
+    transition: color 0.3s;
+}
+
+.feature:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+}
+
+.feature:hover img {
+    transform: scale(1.1);
+}
+
+.feature:hover h5 {
+    color: #ff4b2b;
+}
+
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .feature-container {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @media (max-width: 480px) {
+        .feature-container {
+            grid-template-columns: repeat(1, 1fr);
+        }
+    }
+
+.feature img{
+    width: 100%;
+    height: 200px;
+    border-radius:20px ;
+}
+.feature{
+    width: 20%;
+    min-width: 50px;
+    padding: 5px 5px;
+    border: 0.1px solid#cce7d0;
+    border-radius: 20px;
+    cursor: pointer;
+    box-shadow: 20px 20px 30px rgba(0, 0,0,0.02);
+    margin: 15px 0;
+    transition: 0.2s ease;
+}
+.feature :hover{
+    box-shadow: 20px 20px 30px rgba(0, 0,0,0.06);
+}
+.feature h5{
+    font-size:25px ;
+    padding: none;
+}
+.feature{
+    display: inline-block;
+    margin: 20px;
+    padding: 10px;
+    border: 1px solid#ddd;
+    text-align: center;    
+}
+
+
+</style>

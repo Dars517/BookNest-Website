@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Book Collection - BookNest</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <nav>
+      <h1>📚 BookNest</h1>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="cart.html">Cart</a></li>
+        <li><a href="wishlist.html">Wishlist</a></li>
+        <li><a href="orders.html">Orders</a></li>
+        <li><a href="login.html">Login</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <div class="container">
+    <!-- Search -->
+    <input type="text" id="searchBox" placeholder="Search for a book..." style="width:100%; padding:10px; border-radius:6px; border:1px solid #ccc; margin-bottom:20px;">
+
+    <!-- Biography Section -->
+    <h2 class="section-title">BIOGRAPHY BOOKS</h2>
+    <div class="grid" id="BIOGRAPHYBooks"></div>
+
+    <!-- Horror Section -->
+    <h2 class="section-title">HORROR BOOKS</h2>
+    <div class="grid" id="horrorBooks"></div>
+
+    <!-- Popular Section -->
+    <h2 class="section-title">POPULAR BOOKS</h2>
+    <div class="grid" id="popularBooks"></div>
+
+    <!-- Sports Section -->
+    <h2 class="section-title">SPORTS BOOKS</h2>
+    <div class="grid" id="sportsBooks"></div>
+
+    <!-- Comics Section -->
+    <h2 class="section-title">COMICS BOOKS</h2>
+    <div class="grid" id="comicsBooks"></div>
+
+    <!-- 10th Section -->
+    <h2 class="section-title">10TH BOOKS</h2>
+    <div class="grid" id="10thBooks"></div>
+
+    <!-- 12th Section -->
+    <h2 class="section-title">12TH BOOKS</h2>
+    <div class="grid" id="12thBooks"></div>
+
+    <!-- We Recommend -->
+    <h2 class="section-title">We Recommend</h2>
+    <div class="grid" id="recommendBooks"></div>
+  </div>
+
+  <script>
+    // ✅ Unique ids for each book
+    const books = [
+      {id:1, title:"IKIGAI", author:"Hector Garcia", price:319, category:"popular", image:"../image/p1.jpg"},
+      {id:2, title:"RICH DAD POOR DAD", author:"Robert T. Kiyosaki", price:355, category:"popular", image:"../image/p2.jpg"},
+      {id:3, title:"ATOMIC HABITS", author:"James Clear", price:491, category:"popular", image:"../image/p3.jpg"},
+      {id:4, title:"DON'T BELIEVE EVERYTHING YOU THINK", author:"Joseph Nguyen", price:169, category:"popular", image:"../image/p4.jpg"},
+      {id:5, title:"THE ART OF BEING ALONE", author:"Colleen Hoover", price:299, category:"popular", image:"../image/p5.jpg"},
+
+      {id:6, title:"PERCY JACKSON", author:"Rick Riordan", price:311, category:"horror", image:"../image/h1.jpg"},
+      {id:7, title:"FRANKENSTEIN", author:"Mary Shelley", price:92, category:"horror", image:"../image/h2.jpg"},
+      {id:8, title:"THAT NIGHT", author:"Nidhi Upadhyay", price:150, category:"horror", image:"../image/h3.jpg"},
+      {id:9, title:"DRACULA", author:"Bram Stoker", price:428, category:"horror", image:"../image/h4.jpg"},
+      {id:10, title:"METAMORPHOSIS", author:"Franz Kafka", price:89, category:"horror", image:"../image/h5.jpg"},
+
+      {id:11, title:"Football Fever", author:"Srinjoy Chowdhury", price:172, category:"sports", image:"../image/s1.jpg"},
+      {id:12, title:"ICE HOCKEY", author:"Steve Cameron", price:1939, category:"sports", image:"../image/s2.jpg"},
+      {id:13, title:"CRICKET", author:"Jon Hotten", price:372, category:"sports", image:"../image/s3.jpg"},
+      {id:14, title:"UFC", author:"Wes Carsen", price:199, category:"sports", image:"../image/s4.jpg"},
+      {id:15, title:"BASKETBALL", author:"Chad Millman", price:782, category:"sports", image:"../image/s5.jpg"},
+
+      {id:16, title:"CRISTIANO RONALDO", author:"Guillem Balague", price:449, category:"recommend", image:"../image/b1.jpg"},
+      {id:17, title:"FRANKENSTEIN", author:"Mary Shelley", price:92, category:"recommend", image:"../image/h2.jpg"},
+      {id:18, title:"LIONEL MESSI", author:"GUILLEM Balague", price:509, category:"recommend", image:"../image/b3.jpg"},
+      {id:19, title:"RICH DAD POOR DAD", author:"Robert T. Kiyosaki", price:355, category:"recommend", image:"../image/p2.jpg"},
+      {id:20, title:"THE ART OF BEING ALONE", author:"Colleen Hoover", price:299, category:"recommend", image:"../image/p5.jpg"},
+
+      {id:21, title:"ENGLISH TEXTBOOK", author:"Pushpendra Kaur", price:116, category:"10th", image:"../image/101.jpg"},
+      {id:22, title:"MATHEMATICS", author:"Ncert", price:70, category:"10th", image:"../image/102.jpg"},
+      {id:23, title:"SCIENCE", author:"Ncertkart Books", price:88, category:"10th", image:"../image/103.jpg"},
+      {id:24, title:"SOCIAL SCIENCE", author:"Kirti Sharma", price:512, category:"10th", image:"../image/104.jpg"},
+      {id:25, title:"GOLDEN HINDI", author:"Sanchayan Mehta", price:298, category:"10th", image:"../image/105.jpg"},
+
+      {id:26, title:"BUSINESS STUDIES", author:"Nidhi Jain", price:191, category:"12th", image:"../image/121.jpg"},
+      {id:27, title:"ENGLISH-CORE", author:"Parneet Kaur", price:309, category:"12th", image:"../image/122.jpg"},
+      {id:28, title:"INFORMATICS PRACTICES", author:"Matt Haig", price:642, category:"12th", image:"../image/123.jpg"},
+      {id:29, title:"ECONOMICS", author:"Neeraj Publication", price:239, category:"12th", image:"../image/124.jpg"},
+      {id:30, title:"ACCOUNTANCY", author:"Pankaj Yaduvanshi", price:300, category:"12th", image:"../image/125.jpg"},
+
+      {id:31, title:"SPIDER-MAN", author:"Donny Cates", price:299, category:"comics", image:"../image/c1.jpg"},
+      {id:32, title:"CAPTAIN AMERICA", author:"Alan Gratz", price:354, category:"comics", image:"../image/c2.jpg"},
+      {id:33, title:"AVENGERS", author:"Jason Aaron", price:149, category:"comics", image:"../image/c3.jpg"},
+      {id:34, title:"THE LAST KID ON EARTH", author:"Smith Fery", price:289, category:"comics", image:"../image/c4.jpg"},
+      {id:35, title:"THE JUNGLE BOOK", author:"Wonder House Book", price:208, category:"comics", image:"../image/c5.jpg"},
+
+      {id:36, title:"CRISTIANO RONALDO", author:"Guillem Balague", price:449, category:"BIOGRAPHY", image:"../image/b1.jpg"},
+      {id:37, title:"DHONI TOUCH", author:"Bharat Sundaresan", price:263, category:"BIOGRAPHY", image:"../image/b2.jpg"},
+      {id:38, title:"LIONEL MESSI", author:"GUILLEM Balague", price:509, category:"BIOGRAPHY", image:"../image/b3.jpg"},
+      {id:39, title:"CONOR MCGREGOR", author:"John Smith", price:1452, category:"BIOGRAPHY", image:"../image/b4.jpg"},
+      {id:40, title:"CHASE YOUR DREAMS", author:"Sachin Tendulkar", price:199, category:"BIOGRAPHY", image:"../image/b5.jpg"}
+    ];
+
+    function renderBooks(category, containerId){
+      const container=document.getElementById(containerId);
+      container.innerHTML=books.filter(b=>b.category===category)
+      .map(b=>`
+        <div class="book">
+          <img src="${b.image}" alt="${b.title}">
+          <h3>${b.title}</h3>
+          <p>by ${b.author}</p>
+          <p>₹${b.price}</p>
+          <div class="buttons">
+            <button onclick="addToCart(${b.id})"> Add to Cart </button>
+            <button onclick="addToWishlist(${b.id})"> Add to Wishlist </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function addToCart(bookId) {
+              const userId = localStorage.getItem("userId");
+              if (!userId) return alert("Please login first");
+
+             // Find the book object from array
+             const book = books.find(b => b.id === bookId);
+             if (!book) return alert("Book not found!");
+
+             fetch("http://localhost:5000/api/cart", {      
+             method: "POST",
+             headers: { "Content-Type": "application/json" },
+             body: JSON.stringify({ user_id: userId, book_id: bookId, quantity: 1 })
+            })
+          .then(res => res.json())
+          .then(data => alert(data.message || `${book.title} added to cart`))
+          .catch(err => console.error(err));
+}
+
+           
+    function addToWishlist(bookId) {
+  const userId = localStorage.getItem("userId");
+  if (!userId) return alert("Please login first");
+
+  fetch("http://localhost:5000/api/wishlist", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ user_id: userId, book_id: bookId })
+  })
+  .then(res => res.json())
+  .then(data => alert(data.message))
+  .catch(err => console.error(err));
+}
+
+  
+  const searchBox = document.getElementById("searchBox");
+  searchBox.addEventListener("input", () => {
+    const term = searchBox.value.toLowerCase();
+    document.querySelectorAll(".book").forEach(book => {
+      const title = book.querySelector("h3").textContent.toLowerCase();
+      const author = book.querySelector("p").textContent.toLowerCase();
+      // ✅ Fix: keep proper grid by hiding items instead of setting block
+      book.style.display = (title.includes(term) || author.includes(term)) ? "" : "none";
+    });
+  });
+
+
+    // Render all sections
+    renderBooks("popular","popularBooks");
+    renderBooks("horror","horrorBooks");
+    renderBooks("sports","sportsBooks");
+    renderBooks("recommend","recommendBooks");
+    renderBooks("10th","10thBooks");
+    renderBooks("12th","12thBooks");
+    renderBooks("comics","comicsBooks");
+    renderBooks("BIOGRAPHY","BIOGRAPHYBooks");
+  </script>
+
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background: #f9f9f9;
+    }
+    header {
+      background: #222;
+      color: white;
+      padding: 10px 20px;
+    }
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    nav ul {
+      list-style: none;
+      display: flex;
+    }
+    nav ul li {
+      margin-left: 20px;
+    }
+    nav ul li a {
+      color: white;
+      text-decoration: none;
+    }
+
+    .container {
+      padding: 20px;
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    h2.section-title {
+      margin: 20px 0 10px;
+      font-size: 1.4rem;
+      color: #2c3e50;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+    }
+
+    .book {
+      background: white;
+      border-radius: 10px;
+      padding: 15px;
+      text-align: center;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      transition: transform 0.2s;
+    }
+    .book:hover {
+      transform: translateY(-5px);
+    }
+    .book img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+    .book h3 {
+      margin: 10px 0 5px;
+      font-size: 1rem;
+    }
+    .book p {
+      margin: 5px 0;
+      font-size: 0.9rem;
+      color: #555;
+    }
+
+    .buttons {
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .buttons button {
+    padding: 10px 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: bold;
+    background: #a7ce09;
+    transition: background 0.2s, transform 0.2s;
+  }
+
+  </style>
+</body>
+</html>
