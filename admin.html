@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin - BookNest</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f4f6f9;
+    }
+    header {
+      background: #2c3e50;
+      color: #fff;
+      padding: 15px 20px;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 1.5rem;
+    }
+    nav ul {
+      list-style: none;
+      display: flex;
+      margin: 0;
+      padding: 0;
+    }
+    nav ul li {
+      margin-left: 20px;
+    }
+    nav ul li a {
+      color: white;
+      text-decoration: none;
+    }
+    nav ul li a:hover {
+      text-decoration: underline;
+    }
+
+    /* Layout */
+    .admin-container {
+      display: flex;
+    }
+    .sidebar {
+      width: 220px;
+      background: #34495e;
+      color: #fff;
+      min-height: 100vh;
+      padding: 20px 10px;
+    }
+    .sidebar h2 {
+      font-size: 1.2rem;
+      margin-bottom: 20px;
+    }
+    .sidebar a {
+      display: block;
+      padding: 10px;
+      margin-bottom: 8px;
+      color: #fff;
+      background: #3d566e;
+      border-radius: 6px;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+    .sidebar a:hover {
+      background: #2ecc71;
+    }
+
+    .main-content {
+      flex: 1;
+      padding: 20px;
+    }
+    h2 {
+      margin: 20px 0 10px;
+      font-size: 1.3rem;
+      color: #2c3e50;
+    }
+
+    /* Forms */
+    .form-container {
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+      max-width: 500px;
+    }
+    form input, form textarea {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 12px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+    form button {
+      background: #27ae60;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    form button:hover {
+      background: #219150;
+    }
+
+    /* Tables */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 25px;
+      background: #fff;
+      border-radius: 6px;
+      overflow: hidden;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    th, td {
+      padding: 12px;
+      border-bottom: 1px solid #eee;
+      text-align: left;
+    }
+    th {
+      background: #2c3e50;
+      color: white;
+    }
+    td button {
+      padding: 6px 10px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      color: white;
+    }
+    .delete-btn {
+      background: #e74c3c;
+    }
+    .delete-btn:hover {
+      background: #c0392b;
+    }
+    .update-btn {
+      background: #2980b9;
+    }
+    .update-btn:hover {
+      background: #1f6391;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>📚 BookNest - Admin Dashboard</h1>
+  </header>
+
+  <div class="admin-container">
+    <aside class="sidebar">
+      <h2>Dashboard</h2>
+      <a href="#addBook">➕ Add Book</a>
+      <a href="#manageBooks">📚 Manage Books</a>
+      <a href="#manageOrders">📦 Manage Orders</a>
+    </aside>
+
+    <main class="main-content">
+      <!-- Add Book -->
+      <section id="addBook">
+        <h2>Add Book</h2>
+        <form id="addBookForm" class="form-container">
+          <input type="text" id="title" placeholder="Title" required>
+          <input type="text" id="author" placeholder="Author" required>
+          <input type="text" id="category" placeholder="Category" required>
+          <input type="number" id="price" placeholder="Price" required>
+          <input type="text" id="image" placeholder="Image URL">
+          <button type="submit">Add Book</button>
+        </form>
+      </section>
+
+      <!-- Manage Books -->
+      <section id="manageBooks">
+        <h2>Manage Books</h2>
+        <table id="adminBookTable">
+          <thead><tr><th>Book</th><th>Action</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </section>
+
+      <!-- Manage Orders -->
+      <section id="manageOrders">
+        <h2>Manage Orders</h2>
+        <table id="adminOrdersTable">
+          <thead>
+            <tr>
+              <th>Order ID</th>
+              <th>User</th>
+              <th>Total Price</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    // Load Books
+    fetch('http://localhost:5000/api/books')
+      .then(r=>r.json())
+      .then(data=>{
+        const tbody=document.querySelector('#adminBookTable tbody');
+        tbody.innerHTML = "";
+        data.forEach(book=>{
+          tbody.innerHTML += `<tr>
+            <td>${book.title}</td>
+            <td><button class="delete-btn" onclick="delBook(${book.id})">Delete</button></td>
+          </tr>`;
+        });
+      });
+
+    // Add Book
+    // Add Book
+document.getElementById('addBookForm').addEventListener('submit', e => {
+  e.preventDefault();
+
+  fetch('http://localhost:5000/api/books', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      title: document.getElementById('title').value,
+      author: document.getElementById('author').value,
+      category: document.getElementById('category').value,
+      price: parseFloat(document.getElementById('price').value),
+      image: document.getElementById('image').value
+    })
+  })
+    .then(res => res.json())
+    .then(d => {
+      console.log("Response:", d);
+      if (d.error) {
+        alert("Error: " + d.error); // show real backend error
+      } else {
+        alert(d.message || "Book added successfully!");
+        location.reload();
+      }
+    })
+    .catch(err => {
+      console.error("Error:", err);
+      alert("Failed to add book. See console for details.");
+    });
+});
+
+    function delBook(id){
+      fetch(`http://localhost:5000/api/books/${id}`,{method:'DELETE'})
+      .then(r=>r.json()).then(()=>location.reload());
+    }
+
+    // Load Orders (Admin)
+fetch('http://localhost:5000/api/orders') // ✅ Now gets ALL orders
+  .then(r => r.json())
+  .then(data=>{
+    const tbody=document.querySelector('#adminOrdersTable tbody');
+    tbody.innerHTML="";
+    data.forEach(order=>{
+      tbody.innerHTML += `<tr>
+        <td>${order.id}</td>
+        <td>${order.customer} (ID: ${order.user_id})</td>
+        <td>₹${order.total_price}</td>
+        <td>${order.status || "Pending"}</td>
+        <td>
+          <button class="update-btn" onclick="updateOrder(${order.id}, 'Shipped')">Mark Shipped</button>
+          <button class="update-btn" onclick="updateOrder(${order.id}, 'Delivered')">Mark Delivered</button>
+        </td>
+      </tr>`;
+    });
+  });
+
+
+    function updateOrder(orderId, status){
+      fetch(`http://localhost:5000/api/orders/${orderId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ status })
+      }).then(r=>r.json()).then(d=>{
+        alert(d.message);
+        location.reload();
+      });
+    }
+  </script>
+</body>
+</html>
