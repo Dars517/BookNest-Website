@@ -1,1 +1,0 @@
- <button class="cart-btn" onclick="addToCart(${b.id})">Add to Cart</button>
